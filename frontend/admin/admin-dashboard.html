@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    body {
+      background-color: #f0f2f5;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .dashboard {
+      max-width: 1000px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+    .dashboard h2 {
+      margin-bottom: 30px;
+    }
+    .card {
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <h2>Welcome Admin</h2>
+    <div class="row g-4 mb-4">
+      <div class="col-md-6">
+        <div class="card p-3 bg-light">
+          <h5>Total Clients</h5>
+          <p id="totalClients">Loading...</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card p-3 bg-warning text-white">
+          <h5>Expired Memberships</h5>
+          <p id="expiredClients">Loading...</p>
+        </div>
+      </div>
+    </div>
+
+    <h4>All Clients</h4>
+    <table class="table table-bordered table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Membership</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="clientTable">
+        <!-- Clients will load here -->
+      </tbody>
+    </table>
+
+    <div class="text-end">
+      <button onclick="logout()" class="btn btn-danger">Logout</button>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem("adminToken");
+
+    async function fetchAdminData() {
+      try {
+        const res = await fetch("http://localhost:5000/api/admin/dashboard", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert("Unauthorized or error fetching data.");
+          window.location.href = "../login.html";
+          return;
+        }
+
+        document.getElementById("totalClients").innerText = data.totalClients;
+        document.getElementById("expiredClients").innerText = data.expiredMemberships;
+
+        const tbody = document.getElementById("clientTable");
+        tbody.innerHTML = "";
+
+        data.clients.forEach((client) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${client.name}</td>
+            <td>${client.email}</td>
+            <td>${client.membershipStatus}</td>
+            <td>
+              <button class="btn btn-sm btn-danger" onclick="deleteClient('${client._id}')">Delete</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem("adminToken");
+      window.location.href = "../login.html";
+    }
+
+    async function deleteClient(id) {
+      const confirmDelete = confirm("Are you sure you want to delete this client?");
+      if (!confirmDelete) return;
+
+      try {
+        const res = await fetch(`http://localhost:5000/api/admin/client/${id}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (res.ok) {
+          alert("Client deleted");
+          fetchAdminData(); // Refresh table
+        } else {
+          alert("Error deleting client");
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    fetchAdminData();
+  </script>
+</body>
+</html>

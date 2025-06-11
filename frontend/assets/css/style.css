@@ -1,0 +1,19 @@
+
+body {
+  background: linear-gradient(to right, #3f2b96, #a8c0ff);
+  font-family: Arial, sans-serif;
+}
+
+.login-box {
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard {
+  padding: 2rem;
+  text-align: center;
+}

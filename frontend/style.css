@@ -1,0 +1,66 @@
+body {
+  background: #0e1013;
+  color: white;
+  font-family: 'Arial';
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.login-box {
+  background: #1e2127;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px #00ffd5;
+}
+input, select {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+button {
+  padding: 10px;
+  background: #00ffd5;
+  border: none;
+  border-radius: 5px;
+  color: #000;
+  cursor: pointer;
+}
+.error-msg {
+  color: red;
+}
+.dashboard-container {
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.card-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.card {
+  flex: 1 1 250px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+
